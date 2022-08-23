@@ -1,0 +1,77 @@
+﻿@page "/tickets/edit/{Id:int}"
+@page "/tickets/create"
+@using DataAccess.Enums
+@using MotorReparation_Client.Pages.WorkItems
+
+
+<div class="row m-3">
+    <div class="col-8">
+        <h4 class="card-title text-info">Ticket Details</h4>
+    </div>
+    <div class="col-3 offset-1">
+        <button class="btn btn-info form-control" @onclick="OnClickCreateWorkItemButton">Create new Work Item</button>
+    </div>
+</div>
+
+
+<WorkItemUpsert ConfirmationChange="ConfirmCreate_Click" ParentTicket="TicketModel.Id"></WorkItemUpsert>
+
+<div class="row m-5">
+    <h3 class="card-title text-info mb-3 ml-3">@Title Ticket</h3>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <EditForm Model="TicketModel" OnValidSubmit="HandleTicketUpsert">
+                    <DataAnnotationsValidator />
+                    <div class="mb-3">
+                        <label>Title</label>
+                        <InputText @bind-Value="TicketModel.Title" class="form-control"></InputText>
+                        <ValidationMessage For="() => TicketModel.Title"></ValidationMessage>
+                    </div>
+                    <div class="mb-3">
+                        <label>Description</label>
+                        <InputText @bind-Value="TicketModel.Description" class="form-control"></InputText>
+                        <ValidationMessage For="() => TicketModel.Description"></ValidationMessage>
+
+                    </div>
+                    <InputSelect @bind-Value=TicketModel.Status>
+                        @foreach (var c in Enum.GetValues(typeof(TicketStatus)))
+                        {
+                            <option value="@c">@c.ToString()</option>
+                        }
+                    </InputSelect>
+
+                    @if (TicketModel.WorkItems != null && TicketModel.WorkItems.Any())
+                    {
+                        @foreach (var item in TicketModel.WorkItems)
+                        {
+                            <div>
+                                <div class="mb-3">
+                                    <label>Labor Price</label>
+                                    <div>@item.LaborPrice</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Hours Per Quantity</label>
+                                    <p>@item.HoursPerQuantity</p>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Type</label>
+                                    <p>@item.Type.ToString()</p>
+                                </div> <div class="mb-3">
+                                    <button class="btn btn-danger" @onclick="() => OnClickDeleteItem(item.Id)">Delete</button>
+                                </div>
+
+                            </div>
+                        }
+                    }
+                    <div class="mt-3">
+                        <button class="btn btn-primary">@Title Ticket</button>
+                        <NavLink href="tickets" class="btn btn-secondary">Back to Index</NavLink>
+                    </div>
+
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,45 @@
+﻿@page "/tickets"
+@using DataAccess.Enums
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+
+
+<div class="row m-4">
+    <div class="col-8">
+        <h4 class="card-title text-info">Ticket's</h4>
+    </div>
+    <div class="col-3 offset-1">
+        <NavLink href="tickets/create" class="btn btn-info form-control">Add New Ticket</NavLink>
+    </div>
+</div>
+
+@if (Tickets != null && Tickets.Any())
+{
+    <div class="my-4 mx-5">
+        @foreach (var ticket in Tickets)
+        {
+            <div class="mt-4" style="border-radius:20px; border: 1px solid #444444">
+                <div class="m-4">
+                    <a class="card-title text-warning" style="font-size:xx-large" href="@($"tickets/edit/{ticket.Id}")">@ticket.Title</a>
+                    <p class="card-text">
+                        @((MarkupString)ticket.Description)
+                    </p>
+                    <p class="card-text text-info">
+                        @ticket.Status.ToString()
+                    </p>
+
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No tickets available</p>
+}
+
+
+@code {
+
+}

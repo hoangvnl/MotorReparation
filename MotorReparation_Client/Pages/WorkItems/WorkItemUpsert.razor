@@ -1,0 +1,47 @@
+﻿@using DataAccess.Enums
+
+
+<div class="modal fade" data-backdrop="static" data-keyboard="false" id="createItemModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create Work Item</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="()=>OnConfirmationChange(false)">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="ItemModel">
+
+                    <div class="mb-3">
+                        <label>Labor Price</label>
+                        <InputNumber @bind-Value="ItemModel.LaborPrice" class="form-control"></InputNumber>
+                        <ValidationMessage For="() => ItemModel.LaborPrice"></ValidationMessage>
+                    </div>
+                    <div class="mb-3">
+                        <label>Hours Per Quantity</label>
+                        <InputNumber @bind-Value="ItemModel.HoursPerQuantity" class="form-control"></InputNumber>
+                        <ValidationMessage For="() => ItemModel.HoursPerQuantity"></ValidationMessage>
+                    </div>
+                    <InputSelect @bind-Value=ItemModel.Type>
+                        @foreach (var c in Enum.GetValues(typeof(ItemType)))
+                        {
+                            <option value="@c">@c.ToString()</option>
+                        }
+                    </InputSelect>
+                    <div class="mb-3">
+                        <button class="btn btn-primary" @onclick="HandleWorkItemUpsert">Create Ticket</button>
+                        <NavLink href="tickets" class="btn btn-secondary">Back to Index</NavLink>
+                    </div>
+                </EditForm>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="()=>OnConfirmationChange(false)">
+                    Cancel
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
